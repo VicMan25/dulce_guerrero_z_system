@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(php artisan *)",
+      "Bash(findstr \"ventas\\\\|gastos\\\\|entradas\\\\|insumos\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Recurse)",
+      "Bash(Select-Object -First 50)",
+      "Bash(Format-Table FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 100 FullName | ForEach-Object { $_.FullName })"
+    ]
+  }
+}
