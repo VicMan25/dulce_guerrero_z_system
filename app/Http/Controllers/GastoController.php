@@ -15,21 +15,21 @@ class GastoController extends Controller
     {
         $fechaDesde = $request->fecha_desde;
         $fechaHasta = $request->fecha_hasta;
+        $filtroPorDefecto = !$fechaDesde && !$fechaHasta;
+
+        // Por defecto muestra la semana actual (lunes a domingo)
+        if ($filtroPorDefecto) {
+            $fechaDesde = Carbon::now()->startOfWeek(Carbon::MONDAY)->format('Y-m-d');
+            $fechaHasta = Carbon::now()->endOfWeek(Carbon::SUNDAY)->format('Y-m-d');
+        }
 
         $gastosQuery   = Gasto::query();
         $ventasQuery   = Venta::query();
         $ingresosQuery = IngresoManual::query();
 
-        if ($fechaDesde) {
-            $gastosQuery->whereDate('fecha', '>=', $fechaDesde);
-            $ventasQuery->whereDate('fecha', '>=', $fechaDesde);
-            $ingresosQuery->whereDate('fecha', '>=', $fechaDesde);
-        }
-        if ($fechaHasta) {
-            $gastosQuery->whereDate('fecha', '<=', $fechaHasta);
-            $ventasQuery->whereDate('fecha', '<=', $fechaHasta);
-            $ingresosQuery->whereDate('fecha', '<=', $fechaHasta);
-        }
+        $gastosQuery->whereDate('fecha', '>=', $fechaDesde)->whereDate('fecha', '<=', $fechaHasta);
+        $ventasQuery->whereDate('fecha', '>=', $fechaDesde)->whereDate('fecha', '<=', $fechaHasta);
+        $ingresosQuery->whereDate('fecha', '>=', $fechaDesde)->whereDate('fecha', '<=', $fechaHasta);
 
         $totalGastos   = (float) $gastosQuery->sum('monto');
         $totalVentas   = (float) $ventasQuery->sum('total');
@@ -40,9 +40,8 @@ class GastoController extends Controller
         $gastos           = $gastosQuery->orderByDesc('fecha')->get();
         $ingresosManuales = $ingresosQuery->orderByDesc('fecha')->get();
 
-        // Rango para la gráfica: el período filtrado o los últimos 30 días
-        $chartDesde = $fechaDesde ? Carbon::parse($fechaDesde) : Carbon::now()->subDays(29);
-        $chartHasta = $fechaHasta ? Carbon::parse($fechaHasta) : Carbon::now();
+        $chartDesde = Carbon::parse($fechaDesde);
+        $chartHasta = Carbon::parse($fechaHasta);
 
         $ventasPorDia = Venta::whereBetween(DB::raw('date(fecha)'), [
             $chartDesde->format('Y-m-d'),
@@ -83,7 +82,7 @@ class GastoController extends Controller
         return view('gastos.index', compact(
             'gastos', 'ingresosManuales',
             'totalGastos', 'totalIngresos', 'totalVentas', 'totalManuales', 'balance',
-            'fechaDesde', 'fechaHasta',
+            'fechaDesde', 'fechaHasta', 'filtroPorDefecto',
             'chartLabels', 'chartVentas', 'chartManuales', 'chartGastos'
         ));
     }

@@ -54,6 +54,17 @@
             text-decoration: none;
             letter-spacing: 0.5px;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-logo {
+            height: 38px;
+            width: auto;
+            border-radius: 8px;
+            object-fit: contain;
+            flex-shrink: 0;
         }
 
         .nav-links {
@@ -464,7 +475,20 @@
     <nav class="navbar">
         <div class="navbar-container">
 
-            <a href="{{ route('dashboard') }}" class="brand">🍬 Dulce Guerrero'z</a>
+            <a href="{{ route('dashboard') }}" class="brand">
+                @if(file_exists(public_path('img/logo.png')))
+                    <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
+                @elseif(file_exists(public_path('img/logo.jpg')))
+                    <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
+                @elseif(file_exists(public_path('img/logo.jpeg')))
+                    <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
+                @elseif(file_exists(public_path('img/logo.webp')))
+                    <img src="{{ asset('img/logoDulceG.webp') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
+                @else
+                    🍬
+                @endif
+                Dulce Guerrero'z
+            </a>
 
             {{-- Botón hamburguesa (solo móvil) --}}
             <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">☰</button>

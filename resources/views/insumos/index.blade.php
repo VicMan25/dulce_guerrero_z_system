@@ -15,6 +15,33 @@
         </div>
     @endif
 
+    {{-- Buscador por nombre y unidad --}}
+    <div class="filter-bar">
+        <form method="GET" action="{{ route('insumos.index') }}">
+            <div class="filter-grid-2">
+                <div class="form-group">
+                    <label>Buscar por nombre</label>
+                    <input type="text" name="buscar" value="{{ $buscar ?? '' }}" placeholder="Ej: Azúcar">
+                </div>
+                <div class="form-group">
+                    <label>Unidad de medida</label>
+                    <select name="unidad">
+                        <option value="">Todas las unidades</option>
+                        @foreach(['unidades', 'paquetes', 'gramos', 'kilogramos', 'mililitros', 'litros', 'porciones'] as $u)
+                            <option value="{{ $u }}" {{ ($unidad ?? '') === $u ? 'selected' : '' }}>
+                                {{ ucfirst($u) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="top-actions" style="margin-top:12px;">
+                <button type="submit" class="btn">Buscar</button>
+                <a href="{{ route('insumos.index') }}" class="btn btn-secondary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+
     <div class="top-actions">
         <a href="{{ route('conteos.create') }}" class="btn btn-success">📋 Hacer conteo</a>
         <a href="{{ route('conteos.index') }}" class="btn btn-secondary">Historial de conteos</a>

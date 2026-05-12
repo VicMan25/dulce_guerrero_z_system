@@ -7,17 +7,29 @@ use Illuminate\Http\Request;
 
 class InsumoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $buscar = $request->buscar;
+        $unidad = $request->unidad;
+
+        $query = Insumo::query();
+
+        if ($buscar) {
+            $query->where('nombre', 'like', '%' . $buscar . '%');
+        }
+        if ($unidad) {
+            $query->where('unidad_de_medida', $unidad);
+        }
+
         // Primero los de stock bajo, luego por nombre
-        $insumos = Insumo::all()->sortBy([
+        $insumos = $query->get()->sortBy([
             fn($a, $b) => ($a->stock <= $a->stock_minimo ? 0 : 1) <=> ($b->stock <= $b->stock_minimo ? 0 : 1),
             fn($a, $b) => strcmp($a->nombre, $b->nombre),
         ]);
 
         $totalBajoStock = $insumos->filter(fn($i) => $i->stock <= $i->stock_minimo)->count();
 
-        return view('insumos.index', compact('insumos', 'totalBajoStock'));
+        return view('insumos.index', compact('insumos', 'totalBajoStock', 'buscar', 'unidad'));
     }
 
     public function create()

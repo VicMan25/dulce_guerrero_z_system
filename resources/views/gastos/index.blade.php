@@ -12,16 +12,16 @@
             <div class="filter-grid-2">
                 <div class="form-group">
                     <label>Desde</label>
-                    <input type="date" name="fecha_desde" value="{{ $fechaDesde }}">
+                    <input type="date" name="fecha_desde" value="{{ $filtroPorDefecto ? '' : $fechaDesde }}">
                 </div>
                 <div class="form-group">
                     <label>Hasta</label>
-                    <input type="date" name="fecha_hasta" value="{{ $fechaHasta }}">
+                    <input type="date" name="fecha_hasta" value="{{ $filtroPorDefecto ? '' : $fechaHasta }}">
                 </div>
             </div>
             <div class="top-actions" style="margin-top: 14px;">
                 <button type="submit" class="btn">Filtrar</button>
-                <a href="{{ route('gastos.index') }}" class="btn btn-secondary">Limpiar filtros</a>
+                <a href="{{ route('gastos.index') }}" class="btn btn-secondary">Esta semana</a>
             </div>
         </form>
     </div>
@@ -54,8 +54,11 @@
     <div style="background: white; border-radius: 12px; box-shadow: var(--shadow); padding: 20px 24px; margin-bottom: 28px;">
         <h2 style="margin-bottom: 16px;">Evolución financiera
             <span class="muted" style="font-size: 0.85rem; font-weight: 400;">
-                ({{ $fechaDesde ? $fechaDesde : 'últimos 30 días' }}
-                {{ $fechaHasta ? '→ ' . $fechaHasta : '' }})
+                @if($filtroPorDefecto)
+                    (Esta semana)
+                @else
+                    ({{ $fechaDesde }} → {{ $fechaHasta }})
+                @endif
             </span>
         </h2>
         <canvas id="finanzasChart" height="90"></canvas>

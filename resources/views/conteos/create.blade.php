@@ -36,8 +36,8 @@
                         <th style="text-align:center;" class="col-hide-mobile">
                             Actual<br><span style="font-weight:400;font-size:0.78rem;">(sistema)</span>
                         </th>
-                        <th style="text-align:center;">Estado</th>
                         <th style="min-width:130px;">Cant. contada</th>
+                        <th style="text-align:center;">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,14 +60,7 @@
                                 class="col-hide-mobile">
                                 {{ number_format($insumo->stock, 0, ',', '.') }}
                             </td>
-                            <td style="text-align:center;">
-                                @if($bajo)
-                                    <span class="badge badge-danger">Bajo</span>
-                                @else
-                                    <span class="badge badge-success">OK</span>
-                                @endif
-                            </td>
-                            <td>
+                             <td>
                                 <input
                                     type="number"
                                     name="stock[{{ $insumo->id_insumo }}]"
@@ -81,6 +74,14 @@
                                            min-height:44px;"
                                 >
                             </td>
+                            <td style="text-align:center;">
+                                @if($bajo)
+                                    <span class="badge badge-danger">Bajo</span>
+                                @else
+                                    <span class="badge badge-success">OK</span>
+                                @endif
+                            </td>
+                           
                         </tr>
                     @empty
                         <tr>
