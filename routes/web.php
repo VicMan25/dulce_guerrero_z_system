@@ -10,6 +10,7 @@ use App\Http\Controllers\EntradaInventarioController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\IngresoManualController;
 use App\Http\Controllers\ConteoInventarioController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', fn() => redirect()->route('login'));
 
@@ -29,6 +30,7 @@ Route::middleware(['auth', 'no-cache'])->group(function () {
         Route::resource('entradas',  EntradaInventarioController::class)->only(['index', 'create', 'store']);
         Route::resource('gastos',    GastoController::class)->only(['index', 'create', 'store']);
         Route::resource('ingresos',  IngresoManualController::class)->only(['create', 'store']);
+        Route::resource('usuarios',  UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     });
 
     // Administrador y empleado

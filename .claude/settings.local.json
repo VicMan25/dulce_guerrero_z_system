@@ -8,7 +8,9 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Recurse)",
       "Bash(Select-Object -First 50)",
       "Bash(Format-Table FullName)",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 100 FullName | ForEach-Object { $_.FullName })"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 100 FullName | ForEach-Object { $_.FullName })",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\\\\app\\\\Http\\\\Controllers\" -Filter \"*ontroller.php\")",
+      "Bash(Select-Object Name)"
     ]
   }
 }

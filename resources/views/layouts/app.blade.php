@@ -522,6 +522,10 @@
                            class="{{ request()->routeIs('gastos.*') || request()->routeIs('ingresos.*') ? 'active' : '' }}">
                             📊 Finanzas
                         </a>
+                        <a href="{{ route('usuarios.index') }}"
+                           class="{{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
+                            👥 Usuarios
+                        </a>
                     @else
                         {{-- EMPLEADO --}}
                         <a href="{{ route('ventas.create') }}"

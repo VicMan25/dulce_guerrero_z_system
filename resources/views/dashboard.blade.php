@@ -32,6 +32,10 @@
             <span class="quick-icon">📊</span>
             <p>Finanzas</p>
         </a>
+        <a href="{{ route('usuarios.index') }}" class="quick-card">
+            <span class="quick-icon">👥</span>
+            <p>Usuarios</p>
+        </a>
     @endif
 
     {{-- Accesos compartidos admin + empleado --}}
