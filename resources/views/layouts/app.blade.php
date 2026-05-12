@@ -482,8 +482,8 @@
                     <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
                 @elseif(file_exists(public_path('img/logo.jpeg')))
                     <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
-                @elseif(file_exists(public_path('img/logo.webp')))
-                    <img src="{{ asset('img/logoDulceG.webp') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
+                @elseif(file_exists(public_path('img/logoDulceG.jpeg')))
+                    <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z" class="brand-logo">
                 @else
                     🍬
                 @endif
