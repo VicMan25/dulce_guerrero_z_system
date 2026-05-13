@@ -35,12 +35,12 @@
     @endif
 
     {{-- Accesos compartidos admin + empleado --}}
-    <a href="{{ route('ventas.create') }}" class="quick-card accent">
+    <a href="{{ route('ventas.create') }}" class="quick-card">
         <span class="quick-icon">💰</span>
         <p>Nueva venta</p>
     </a>
 
-    <a href="{{ route('ventas.index') }}" class="quick-card accent">
+    <a href="{{ route('ventas.index') }}" class="quick-card">
         <span class="quick-icon">🧾</span>
         <p>Historial ventas</p>
     </a>
