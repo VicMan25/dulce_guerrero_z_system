@@ -20,10 +20,6 @@
             <span class="quick-icon">📋</span>
             <p>Recetas</p>
         </a>
-        <a href="{{ route('insumos.index') }}" class="quick-card">
-            <span class="quick-icon">🧂</span>
-            <p>Inventario</p>
-        </a>
         <a href="{{ route('entradas.create') }}" class="quick-card">
             <span class="quick-icon">📦</span>
             <p>Registrar entrada</p>
