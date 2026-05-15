@@ -48,6 +48,7 @@
         @if(auth()->user()->esAdmin())
             <a href="{{ route('entradas.create') }}" class="btn">+ Registrar entrada</a>
             <a href="{{ route('insumos.create') }}" class="btn btn-secondary">+ Nuevo insumo</a>
+            <a href="{{ route('insumos.estadisticas') }}" class="btn btn-success">📊 Estadísticas</a>
         @endif
     </div>
 
@@ -96,11 +97,21 @@
                             @endif
                         </td>
                         @if(auth()->user()->esAdmin())
-                            <td>
+                            <td style="white-space:nowrap;">
                                 <a href="{{ route('insumos.edit', $insumo->id_insumo) }}"
                                    class="btn btn-secondary" style="padding:6px 12px; font-size:0.85rem;">
                                     Editar
                                 </a>
+                                <form action="{{ route('insumos.destroy', $insumo->id_insumo) }}"
+                                      method="POST" style="display:inline; margin-left:6px;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger"
+                                            style="padding:6px 12px; font-size:0.85rem;"
+                                            onclick="return confirm('¿Eliminar el insumo «{{ $insumo->nombre }}»? Esta acción no se puede deshacer.')">
+                                        Eliminar
+                                    </button>
+                                </form>
                             </td>
                         @endif
                     </tr>

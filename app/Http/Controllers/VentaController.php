@@ -37,6 +37,12 @@ class VentaController extends Controller
         return view('ventas.index', compact('ventas', 'fechaDesde', 'fechaHasta', 'nombreProducto'));
     }
 
+    public function show($id)
+    {
+        $venta = Venta::with('detalles')->findOrFail($id);
+        return view('ventas.show', compact('venta'));
+    }
+
     public function create()
     {
         $productos = Producto::where('activo', 1)->get();

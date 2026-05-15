@@ -36,27 +36,28 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Usar</th>
+                        <th style="width:50px;">Usar</th>
                         <th>Insumo</th>
-                        <th>Unidad</th>
-                        <th>Stock actual</th>
-                        <th>Cantidad para la receta</th>
+                        <th class="col-hide-mobile">Unidad</th>
+                        <th class="col-hide-mobile">Stock actual</th>
+                        <th>Cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($insumos as $insumo)
                         <tr>
-                            <td class="checkbox-cell">
+                            <td class="checkbox-cell" style="text-align:center;">
                                 <input type="checkbox" name="insumos[]" value="{{ $insumo->id_insumo }}"
-                                    {{
-                                        is_array(old('insumos'))
-                                            ? (in_array($insumo->id_insumo, old('insumos')) ? 'checked' : '')
-                                            : (in_array($insumo->id_insumo, $insumosSeleccionados) ? 'checked' : '')
-                                    }}>
+                                       style="width:20px; height:20px; cursor:pointer;"
+                                       {{
+                                           is_array(old('insumos'))
+                                               ? (in_array($insumo->id_insumo, old('insumos')) ? 'checked' : '')
+                                               : (in_array($insumo->id_insumo, $insumosSeleccionados) ? 'checked' : '')
+                                       }}>
                             </td>
                             <td>{{ $insumo->nombre }}</td>
-                            <td>{{ $insumo->unidad_de_medida }}</td>
-                            <td>{{ number_format($insumo->stock, 0, ',', '.') }}</td>
+                            <td class="col-hide-mobile muted">{{ $insumo->unidad_de_medida }}</td>
+                            <td class="col-hide-mobile muted">{{ number_format($insumo->stock, 0, ',', '.') }}</td>
                             <td>
                                 <input type="number" class="small-input"
                                     name="cantidades[{{ $insumo->id_insumo }}]"

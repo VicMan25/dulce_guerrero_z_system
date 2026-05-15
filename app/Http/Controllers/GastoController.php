@@ -13,14 +13,19 @@ class GastoController extends Controller
 {
     public function index(Request $request)
     {
-        $fechaDesde = $request->fecha_desde;
-        $fechaHasta = $request->fecha_hasta;
-        $filtroPorDefecto = !$fechaDesde && !$fechaHasta;
+        $fechaDesdeInput = $request->filled('fecha_desde') ? $request->fecha_desde : null;
+        $fechaHastaInput = $request->filled('fecha_hasta') ? $request->fecha_hasta : null;
+        $filtroPorDefecto = !$fechaDesdeInput && !$fechaHastaInput;
 
-        // Por defecto muestra la semana actual (lunes a domingo)
         if ($filtroPorDefecto) {
             $fechaDesde = Carbon::now()->startOfWeek(Carbon::MONDAY)->format('Y-m-d');
             $fechaHasta = Carbon::now()->endOfWeek(Carbon::SUNDAY)->format('Y-m-d');
+        } else {
+            $fechaDesde = $fechaDesdeInput ?? Carbon::parse($fechaHastaInput)->subDays(6)->format('Y-m-d');
+            $fechaHasta = $fechaHastaInput ?? Carbon::now()->format('Y-m-d');
+            if ($fechaDesde > $fechaHasta) {
+                [$fechaDesde, $fechaHasta] = [$fechaHasta, $fechaDesde];
+            }
         }
 
         $gastosQuery   = Gasto::query();
@@ -79,11 +84,19 @@ class GastoController extends Controller
             $current->addDay();
         }
 
+        $gastosPorCategoria = Gasto::whereDate('fecha', '>=', $fechaDesde)
+            ->whereDate('fecha', '<=', $fechaHasta)
+            ->selectRaw('categoria, SUM(monto) as total')
+            ->groupBy('categoria')
+            ->orderByDesc('total')
+            ->pluck('total', 'categoria');
+
         return view('gastos.index', compact(
             'gastos', 'ingresosManuales',
             'totalGastos', 'totalIngresos', 'totalVentas', 'totalManuales', 'balance',
             'fechaDesde', 'fechaHasta', 'filtroPorDefecto',
-            'chartLabels', 'chartVentas', 'chartManuales', 'chartGastos'
+            'chartLabels', 'chartVentas', 'chartManuales', 'chartGastos',
+            'gastosPorCategoria'
         ));
     }
 

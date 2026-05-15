@@ -19,7 +19,7 @@
                     <input type="date" name="fecha_hasta" value="{{ $filtroPorDefecto ? '' : $fechaHasta }}">
                 </div>
             </div>
-            <div class="top-actions" style="margin-top: 14px;">
+            <div class="top-actions" style="margin-top:14px;">
                 <button type="submit" class="btn">Filtrar</button>
                 <a href="{{ route('gastos.index') }}" class="btn btn-secondary">Esta semana</a>
             </div>
@@ -27,7 +27,7 @@
     </div>
 
     {{-- Tarjetas de resumen --}}
-    <div class="stat-cards" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));">
+    <div class="stat-cards" style="grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));">
         <div class="stat-card stat-neutral">
             <div class="stat-label">Ventas del sistema</div>
             <div class="stat-value">$ {{ number_format($totalVentas, 0, ',', '.') }}</div>
@@ -45,23 +45,61 @@
             <div class="stat-value">$ {{ number_format($totalGastos, 0, ',', '.') }}</div>
         </div>
         <div class="stat-card {{ $balance >= 0 ? 'stat-success' : 'stat-danger' }}">
-            <div class="stat-label">Balance</div>
-            <div class="stat-value">$ {{ number_format($balance, 0, ',', '.') }}</div>
+            <div class="stat-label">Balance neto</div>
+            <div class="stat-value">
+                {{ $balance >= 0 ? '+' : '' }}$ {{ number_format($balance, 0, ',', '.') }}
+            </div>
         </div>
     </div>
 
-    {{-- Gráfica de evolución --}}
-    <div style="background: white; border-radius: 12px; box-shadow: var(--shadow); padding: 20px 24px; margin-bottom: 28px;">
-        <h2 style="margin-bottom: 16px;">Evolución financiera
-            <span class="muted" style="font-size: 0.85rem; font-weight: 400;">
+    {{-- Gráfica principal: Evolución financiera --}}
+    <div style="background:white; border-radius:12px; box-shadow:var(--shadow); padding:22px 24px; margin-bottom:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+            <h2 style="margin:0;">Evolución financiera</h2>
+            <span class="badge badge-neutral">
                 @if($filtroPorDefecto)
-                    (Esta semana)
+                    Esta semana
                 @else
-                    ({{ $fechaDesde }} → {{ $fechaHasta }})
+                    {{ \Carbon\Carbon::parse($fechaDesde)->format('d/m/Y') }}
+                    →
+                    {{ \Carbon\Carbon::parse($fechaHasta)->format('d/m/Y') }}
                 @endif
             </span>
-        </h2>
+        </div>
         <canvas id="finanzasChart" height="90"></canvas>
+    </div>
+
+    {{-- Gráficas secundarias: Distribuciones --}}
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:20px; margin-bottom:28px;">
+
+        {{-- Donut: Gastos por categoría --}}
+        <div style="background:white; border-radius:12px; box-shadow:var(--shadow); padding:22px 24px;">
+            <h2 style="margin-bottom:16px;">Gastos por categoría</h2>
+            @if($totalGastos > 0)
+                <div style="position:relative; height:230px;">
+                    <canvas id="categoriasChart"></canvas>
+                </div>
+            @else
+                <div class="muted" style="text-align:center; padding:40px 0; font-size:0.93rem;">
+                    Sin gastos en este período.
+                </div>
+            @endif
+        </div>
+
+        {{-- Donut: Composición de ingresos --}}
+        <div style="background:white; border-radius:12px; box-shadow:var(--shadow); padding:22px 24px;">
+            <h2 style="margin-bottom:16px;">Composición de ingresos</h2>
+            @if($totalIngresos > 0)
+                <div style="position:relative; height:230px;">
+                    <canvas id="ingresosChart"></canvas>
+                </div>
+            @else
+                <div class="muted" style="text-align:center; padding:40px 0; font-size:0.93rem;">
+                    Sin ingresos en este período.
+                </div>
+            @endif
+        </div>
+
     </div>
 
     {{-- Ingresos manuales --}}
@@ -70,7 +108,7 @@
         <a href="{{ route('ingresos.create') }}" class="btn btn-success">+ Registrar ingreso</a>
     </div>
 
-    <div class="table-responsive" style="margin-bottom: 28px;">
+    <div class="table-responsive" style="margin-bottom:28px;">
         <table>
             <thead>
                 <tr>
@@ -136,79 +174,212 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        const labels   = @json($chartLabels);
-        const ventas   = @json($chartVentas);
-        const manuales = @json($chartManuales);
-        const gastos   = @json($chartGastos);
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    const labels   = @json($chartLabels);
+    const ventas   = @json($chartVentas);
+    const manuales = @json($chartManuales);
+    const gastos   = @json($chartGastos);
+    const balances = labels.map((_, i) => ventas[i] + manuales[i] - gastos[i]);
 
-        const balances = labels.map((_, i) => ventas[i] + manuales[i] - gastos[i]);
+    const fmt = v => '$' + new Intl.NumberFormat('es-CO').format(Math.round(v));
 
-        new Chart(document.getElementById('finanzasChart'), {
-            data: {
-                labels,
-                datasets: [
-                    {
-                        type: 'bar',
-                        label: 'Ventas del sistema',
-                        data: ventas,
-                        backgroundColor: 'rgba(88, 129, 87, 0.75)',
-                        borderRadius: 4,
-                        stack: 'ingresos',
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Ingresos manuales',
-                        data: manuales,
-                        backgroundColor: 'rgba(212, 163, 115, 0.85)',
-                        borderRadius: 4,
-                        stack: 'ingresos',
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Gastos',
-                        data: gastos,
-                        backgroundColor: 'rgba(178, 58, 72, 0.7)',
-                        borderRadius: 4,
-                        stack: 'gastos',
-                    },
-                    {
-                        type: 'line',
-                        label: 'Balance',
-                        data: balances,
-                        borderColor: '#3a6642',
-                        backgroundColor: 'rgba(58, 102, 66, 0.08)',
-                        borderWidth: 2.5,
-                        pointRadius: 3,
-                        tension: 0.3,
-                        fill: false,
-                    },
-                ],
-            },
-            options: {
-                responsive: true,
-                interaction: { mode: 'index', intersect: false },
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: {
-                        callbacks: {
-                            label: ctx => {
-                                const val = new Intl.NumberFormat('es-CO').format(ctx.parsed.y);
-                                return `${ctx.dataset.label}: $${val}`;
-                            }
-                        }
-                    }
+    // ── Gráfica principal: Evolución ──────────────────────────────
+    new Chart(document.getElementById('finanzasChart'), {
+        data: {
+            labels,
+            datasets: [
+                {
+                    type: 'bar',
+                    label: 'Ventas del sistema',
+                    data: ventas,
+                    backgroundColor: 'rgba(88, 129, 87, 0.78)',
+                    borderRadius: 5,
+                    borderSkipped: 'bottom',
+                    stack: 'ingresos',
+                    order: 2,
                 },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: {
-                        ticks: {
-                            callback: v => '$' + new Intl.NumberFormat('es-CO').format(v)
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+                {
+                    type: 'bar',
+                    label: 'Ingresos manuales',
+                    data: manuales,
+                    backgroundColor: 'rgba(212, 163, 115, 0.88)',
+                    borderRadius: 5,
+                    borderSkipped: 'bottom',
+                    stack: 'ingresos',
+                    order: 2,
+                },
+                {
+                    type: 'bar',
+                    label: 'Gastos',
+                    data: gastos,
+                    backgroundColor: 'rgba(178, 58, 72, 0.72)',
+                    borderRadius: 5,
+                    borderSkipped: 'bottom',
+                    stack: 'gastos',
+                    order: 2,
+                },
+                {
+                    type: 'line',
+                    label: 'Balance neto',
+                    data: balances,
+                    borderColor: '#3a5a40',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2.5,
+                    borderDash: [6, 3],
+                    pointRadius: 5,
+                    pointBackgroundColor: balances.map(v => v >= 0 ? '#588157' : '#b23a48'),
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    tension: 0.35,
+                    fill: false,
+                    order: 1,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        padding: 18,
+                        font: { size: 12 },
+                    },
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(50, 50, 50, 0.93)',
+                    titleFont: { size: 13, weight: '600' },
+                    bodyFont: { size: 12 },
+                    padding: 13,
+                    callbacks: {
+                        label: ctx => {
+                            const v = ctx.parsed.y;
+                            const sign = v < 0 ? '-' : '';
+                            return `  ${ctx.dataset.label}: ${sign}${fmt(Math.abs(v))}`;
+                        },
+                        afterBody: items => {
+                            const i = items[0].dataIndex;
+                            const b = balances[i];
+                            const sign = b >= 0 ? '+' : '';
+                            return ['', `  Balance: ${sign}${fmt(b)}`];
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11 } },
+                },
+                y: {
+                    grid: { color: 'rgba(0,0,0,0.06)' },
+                    ticks: {
+                        font: { size: 11 },
+                        callback: v => {
+                            const abs = Math.abs(v);
+                            if (abs >= 1_000_000) return (v < 0 ? '-' : '') + '$' + (abs / 1_000_000).toFixed(1) + 'M';
+                            if (abs >= 1_000)     return (v < 0 ? '-' : '') + '$' + (abs / 1_000).toFixed(0) + 'k';
+                            return '$' + v;
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    // ── Donut: Gastos por categoría ───────────────────────────────
+    @if($totalGastos > 0)
+    const catLabels = @json($gastosPorCategoria->keys());
+    const catData   = @json($gastosPorCategoria->values()->map(fn($v) => (float)$v));
+    const catTotal  = catData.reduce((a, b) => a + b, 0);
+
+    const catColors = [
+        'rgba(212, 163, 115, 0.90)',
+        'rgba(88,  129,  87, 0.85)',
+        'rgba(178,  58,  72, 0.80)',
+        'rgba(165, 165, 141, 0.85)',
+        'rgba(204, 213, 174, 0.90)',
+    ];
+
+    new Chart(document.getElementById('categoriasChart'), {
+        type: 'doughnut',
+        data: {
+            labels: catLabels,
+            datasets: [{
+                data: catData,
+                backgroundColor: catColors.slice(0, catLabels.length),
+                borderWidth: 3,
+                borderColor: '#fff',
+                hoverBorderWidth: 4,
+                hoverOffset: 6,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 14, font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => {
+                            const pct = (ctx.parsed / catTotal * 100).toFixed(1);
+                            return ` ${fmt(ctx.parsed)}  (${pct}%)`;
+                        },
+                    },
+                },
+            },
+        },
+    });
+    @endif
+
+    // ── Donut: Composición de ingresos ────────────────────────────
+    @if($totalIngresos > 0)
+    const ingTotal = {{ $totalIngresos }};
+
+    new Chart(document.getElementById('ingresosChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Ventas del sistema', 'Ingresos manuales'],
+            datasets: [{
+                data: [{{ $totalVentas }}, {{ $totalManuales }}],
+                backgroundColor: [
+                    'rgba(88, 129, 87, 0.82)',
+                    'rgba(212, 163, 115, 0.88)',
+                ],
+                borderWidth: 3,
+                borderColor: '#fff',
+                hoverBorderWidth: 4,
+                hoverOffset: 6,
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '62%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 14, font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => {
+                            const pct = (ctx.parsed / ingTotal * 100).toFixed(1);
+                            return ` ${fmt(ctx.parsed)}  (${pct}%)`;
+                        },
+                    },
+                },
+            },
+        },
+    });
+    @endif
+</script>
 @endsection

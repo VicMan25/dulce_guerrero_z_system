@@ -106,6 +106,9 @@
 
         {{-- Logo --}}
         <div class="text-center mb-4">
+            <img src="{{ asset('img/logoDulceG.jpeg') }}" alt="Logo Dulce Guerrero'z"
+                 style="height:120px; width:120px; object-fit:cover; border-radius:50%;
+                        box-shadow:0 4px 18px rgba(212,163,115,0.35); margin-bottom:14px;">
             <div class="login-logo">Dulce_Guerrero'z</div>
             <p class="text-muted mt-1" style="font-size:0.9rem;">Sistema de gestión</p>
         </div>
@@ -144,12 +147,7 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                    <label class="form-check-label text-muted" for="remember" style="font-size:0.85rem;">
-                        Recordarme
-                    </label>
-                </div>
+                
             </div>
 
             <button type="submit" class="btn btn-login text-white w-100 mb-3">

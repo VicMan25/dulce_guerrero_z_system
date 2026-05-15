@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RecetaController;
 use App\Http\Controllers\InsumoController;
@@ -20,13 +21,14 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'no-cache'])->group(function () {
 
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Solo administrador
     Route::middleware('role:administrador')->group(function () {
         Route::resource('productos', ProductoController::class)->only(['index']);
         Route::resource('recetas',   RecetaController::class);
-        Route::resource('insumos',   InsumoController::class)->only(['create', 'store', 'edit', 'update']);
+        Route::get('insumos/estadisticas', [InsumoController::class, 'estadisticas'])->name('insumos.estadisticas');
+        Route::resource('insumos',   InsumoController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
         Route::resource('entradas',  EntradaInventarioController::class)->only(['index', 'create', 'store']);
         Route::resource('gastos',    GastoController::class)->only(['index', 'create', 'store']);
         Route::resource('ingresos',  IngresoManualController::class)->only(['create', 'store']);
@@ -35,7 +37,7 @@ Route::middleware(['auth', 'no-cache'])->group(function () {
 
     // Administrador y empleado
     Route::middleware('role:administrador,empleado')->group(function () {
-        Route::resource('ventas',   VentaController::class)->only(['index', 'create', 'store']);
+        Route::resource('ventas',   VentaController::class)->only(['index', 'create', 'store', 'show']);
         Route::resource('insumos',  InsumoController::class)->only(['index']);
         Route::resource('conteos',  ConteoInventarioController::class)->only(['index', 'create', 'store', 'show']);
     });

@@ -17,21 +17,21 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID Receta</th>
+                    <th class="col-hide-mobile">ID</th>
                     <th>Nombre</th>
-                    <th>Producto generado</th>
+                    <th class="col-hide-mobile">Producto generado</th>
                     <th>Precio</th>
                     <th>Activa</th>
-                    <th>Insumos</th>
+                    <th class="col-hide-mobile">Insumos</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($recetas as $receta)
                     <tr>
-                        <td>{{ $receta->id_receta }}</td>
-                        <td>{{ $receta->nombre }}</td>
-                        <td>{{ $receta->producto->nombre ?? 'Sin producto' }}</td>
+                        <td class="col-hide-mobile">{{ $receta->id_receta }}</td>
+                        <td style="font-weight:600;">{{ $receta->nombre }}</td>
+                        <td class="col-hide-mobile">{{ $receta->producto->nombre ?? 'Sin producto' }}</td>
                         <td>$ {{ number_format($receta->producto->precio ?? 0, 0, ',', '.') }}</td>
                         <td>
                             @if ($receta->activo)
@@ -40,7 +40,7 @@
                                 <span class="badge badge-danger">No</span>
                             @endif
                         </td>
-                        <td>
+                        <td class="col-hide-mobile">
                             @forelse($receta->detalles as $detalle)
                                 {{ $detalle->insumo->nombre ?? 'Sin insumo' }}
                                 ({{ number_format($detalle->cantidad, 2, ',', '.') }})
@@ -49,14 +49,20 @@
                                 <span class="badge badge-neutral">Sin insumos</span>
                             @endforelse
                         </td>
-                        <td>
-                            <a href="{{ route('recetas.edit', $receta->id_receta) }}" class="btn btn-secondary">Editar</a>
-
+                        <td style="white-space:nowrap;">
+                            <a href="{{ route('recetas.edit', $receta->id_receta) }}"
+                               class="btn btn-secondary" style="padding:8px 12px; font-size:0.85rem;">
+                                Editar
+                            </a>
                             <form action="{{ route('recetas.destroy', $receta->id_receta) }}" method="POST"
-                                class="inline-form">
+                                  style="display:inline; margin-left:4px;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Eliminar / Desactivar</button>
+                                <button type="submit" class="btn btn-danger"
+                                        style="padding:8px 12px; font-size:0.85rem;"
+                                        onclick="return confirm('¿Eliminar la receta «{{ $receta->nombre }}»? Si tiene ventas asociadas solo se desactivará, de lo contrario se eliminará permanentemente.')">
+                                    Eliminar
+                                </button>
                             </form>
                         </td>
                     </tr>

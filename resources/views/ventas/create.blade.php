@@ -38,7 +38,7 @@
         </div>
 
         <div class="top-actions">
-            <button type="submit" class="btn btn-success">Confirmar venta</button>
+            <button type="submit" id="btn-confirmar" class="btn btn-success">Confirmar venta</button>
             <a href="{{ route('ventas.index') }}" class="btn btn-secondary">Ver ventas</a>
         </div>
     </form>
@@ -116,6 +116,13 @@
         $(document).ready(function () {
             inicializarSelect2(document.querySelector('.producto-row'));
             document.querySelector('.cantidad-input').addEventListener('input', calcularTotal);
+        });
+
+        // Anti-doble-envío
+        document.getElementById('form-venta').addEventListener('submit', function () {
+            const btn = document.getElementById('btn-confirmar');
+            btn.disabled = true;
+            btn.textContent = 'Procesando...';
         });
     </script>
 @endsection

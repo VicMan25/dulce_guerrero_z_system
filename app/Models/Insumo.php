@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\DetalleReceta;
 
 class Insumo extends Model
 {
@@ -17,4 +18,9 @@ class Insumo extends Model
         'stock_minimo',
         'activo',
     ];
+
+    public function detallesReceta()
+    {
+        return $this->hasMany(DetalleReceta::class, 'id_insumo', 'id_insumo');
+    }
 }
