@@ -118,9 +118,9 @@
                 @empty
                     <tr>
                         <td colspan="{{ auth()->user()->esAdmin() ? 7 : 6 }}" class="muted">
-                            No hay insumos registrados.
+                            No se encuentrá o no hay insumos registrados.
                             @if(auth()->user()->esAdmin())
-                                <a href="{{ route('insumos.create') }}">Crear el primero</a>.
+                                <a href="{{ route('insumos.create') }}">Crear insumo</a>.
                             @endif
                         </td>
                     </tr>

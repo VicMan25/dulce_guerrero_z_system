@@ -27,8 +27,27 @@
             </div>
         </div>
 
+        {{-- Buscador en tiempo real --}}
+        @if($insumos->isNotEmpty())
+        <div style="margin-bottom:14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div style="position:relative; flex:1; min-width:200px;">
+                <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%);
+                             font-size:1rem; color:#a5a58d; pointer-events:none;">🔍</span>
+                <input type="text" id="buscador-insumo"
+                       placeholder="Buscar insumo por nombre..."
+                       autocomplete="off"
+                       style="width:100%; max-width:100%; padding:11px 12px 11px 36px;
+                              border:1.5px solid #d6d6d6; border-radius:10px;
+                              background:#fffdf8; font-size:0.95rem; min-height:44px;">
+            </div>
+            <span id="contador-insumos" class="muted" style="font-size:0.88rem; white-space:nowrap;">
+                {{ $insumos->count() }} insumos
+            </span>
+        </div>
+        @endif
+
         <div class="table-responsive" style="margin-bottom:24px;">
-            <table>
+            <table id="tabla-conteo">
                 <thead>
                     <tr>
                         <th>Insumo</th>
@@ -40,16 +59,16 @@
                         <th style="text-align:center;">Estado</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbody-insumos">
                     @forelse($insumos as $insumo)
                         @php $bajo = $insumo->stock <= $insumo->stock_minimo; @endphp
-                        <tr style="{{ $bajo ? 'background-color:#fff0f1;' : '' }}">
+                        <tr data-nombre="{{ strtolower($insumo->nombre) }}"
+                            style="{{ $bajo ? 'background-color:#fff0f1;' : '' }}">
                             <td>
                                 <span style="font-weight:{{ $bajo ? '700' : '400' }};">
                                     {{ $insumo->nombre }}
                                 </span>
-                                {{-- En móvil mostramos la unidad y el stock debajo del nombre --}}
-                                <span class="muted" style="display:none;" id="info-mob-{{ $insumo->id_insumo }}">
+                                <span class="muted info-mob" style="display:none;">
                                     · {{ $insumo->unidad_de_medida }}
                                     · actual: {{ number_format($insumo->stock, 0, ',', '.') }}
                                 </span>
@@ -60,7 +79,7 @@
                                 class="col-hide-mobile">
                                 {{ number_format($insumo->stock, 0, ',', '.') }}
                             </td>
-                             <td>
+                            <td>
                                 <input
                                     type="number"
                                     name="stock[{{ $insumo->id_insumo }}]"
@@ -81,13 +100,19 @@
                                     <span class="badge badge-success">OK</span>
                                 @endif
                             </td>
-                           
                         </tr>
                     @empty
                         <tr>
                             <td colspan="5" class="muted">No hay insumos activos registrados.</td>
                         </tr>
                     @endforelse
+
+                    {{-- Fila "sin resultados" para búsqueda vacía --}}
+                    <tr id="fila-sin-resultados" style="display:none;">
+                        <td colspan="5" style="text-align:center; padding:24px 0; color:#a5a58d;">
+                            Ningún insumo coincide con "<span id="texto-busqueda"></span>"
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -103,10 +128,45 @@
 
 @section('scripts')
 <script>
+    const buscador      = document.getElementById('buscador-insumo');
+    const filas         = document.querySelectorAll('#tbody-insumos tr[data-nombre]');
+    const sinResultados = document.getElementById('fila-sin-resultados');
+    const textoBusqueda = document.getElementById('texto-busqueda');
+    const contador      = document.getElementById('contador-insumos');
+    const totalInsumos  = filas.length;
+
+    function aplicarFiltro() {
+        const q = buscador ? buscador.value.toLowerCase().trim() : '';
+        let visibles = 0;
+
+        filas.forEach(fila => {
+            const coincide = fila.dataset.nombre.includes(q);
+            fila.style.display = coincide ? '' : 'none';
+            if (coincide) visibles++;
+        });
+
+        // Fila "sin resultados"
+        if (sinResultados) {
+            sinResultados.style.display = (visibles === 0 && q !== '') ? 'table-row' : 'none';
+            if (textoBusqueda) textoBusqueda.textContent = q;
+        }
+
+        // Contador
+        if (contador) {
+            contador.textContent = q === ''
+                ? `${totalInsumos} insumos`
+                : `${visibles} de ${totalInsumos} insumos`;
+        }
+    }
+
+    if (buscador) {
+        buscador.addEventListener('input', aplicarFiltro);
+    }
+
     // En móvil mostrar info extra debajo del nombre
     function toggleMobileInfo() {
         const isMobile = window.innerWidth <= 600;
-        document.querySelectorAll('[id^="info-mob-"]').forEach(el => {
+        document.querySelectorAll('.info-mob').forEach(el => {
             el.style.display = isMobile ? 'inline' : 'none';
         });
     }
