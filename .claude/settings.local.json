@@ -3,7 +3,9 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Force)",
       "Bash(Select-Object -Property Name, PSIsContainer)",
-      "Bash(Format-Table)"
+      "Bash(Format-Table)",
+      "Bash(php -l \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\\\\app\\\\Http\\\\Controllers\\\\Auth\\\\LoginController.php\")",
+      "Bash(php -l \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\\\\routes\\\\web.php\")"
     ]
   }
 }

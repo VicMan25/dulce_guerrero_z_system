@@ -115,6 +115,15 @@
 
 
         {{-- Alertas --}}
+        @if (session('inactividad'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                 style="background:#fff3cd; border-color:#ffc107; color:#856404;">
+                <strong>⏰ Sesión cerrada por inactividad.</strong><br>
+                <span style="font-size:0.88rem;">Vuelve a iniciar sesión para continuar.</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}

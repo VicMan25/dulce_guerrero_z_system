@@ -44,9 +44,15 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $porInactividad = $request->boolean('inactividad');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        if ($porInactividad) {
+            return redirect()->route('login')->with('inactividad', true);
+        }
+
         return redirect()->route('login')->with('success', 'Sesión cerrada correctamente.');
     }
 }

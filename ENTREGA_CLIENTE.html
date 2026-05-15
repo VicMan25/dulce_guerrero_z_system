@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación del Sistema — Dulce Guerrero'z</title>
+  <style>
+    :root {
+      --primary: #d4a373;
+      --primary-dark: #b5845a;
+      --success: #588157;
+      --danger: #b23a48;
+      --neutral: #6b705c;
+      --bg: #fefae0;
+      --card: #ffffff;
+      --text: #3d3d3d;
+      --muted: #7a7a7a;
+      --border: #e5dfc8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── PORTADA ── */
+    .cover {
+      background: linear-gradient(135deg, #d4a373 0%, #c8956b 40%, #a5755a 100%);
+      color: white;
+      padding: 80px 40px 60px;
+      text-align: center;
+      page-break-after: always;
+    }
+    .cover-logo {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255,255,255,0.5);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      margin-bottom: 28px;
+    }
+    .cover h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .cover .subtitle {
+      font-size: 1.15rem;
+      opacity: 0.88;
+      margin-bottom: 40px;
+    }
+    .cover-meta {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 20px 36px;
+      font-size: 0.95rem;
+    }
+    .cover-meta span { opacity: 0.92; }
+    .cover-meta strong { font-size: 1.05rem; }
+
+    /* ── CONTENIDO ── */
+    .doc {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ── SECCIONES ── */
+    .section {
+      margin-bottom: 52px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--neutral);
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+    }
+    .section-title .icon {
+      font-size: 1.6rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--neutral);
+      margin: 24px 0 10px;
+    }
+
+    p { margin-bottom: 12px; color: var(--text); }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    li { margin-bottom: 6px; }
+
+    /* ── MÓDULOS GRID ── */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .module-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .module-card .mod-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .module-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--neutral);
+      margin-bottom: 6px;
+    }
+    .module-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+    .mod-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 8px;
+    }
+    .badge-admin { background: #faedcd; color: #7a6c5d; }
+    .badge-all   { background: #ddeed8; color: #588157; }
+
+    /* ── ROLES ── */
+    .roles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .role-card {
+      border-radius: 14px;
+      padding: 22px 24px;
+    }
+    .role-admin { background: #fffdf5; border: 2px solid #d4a373; }
+    .role-emp   { background: #f5faf5; border: 2px solid #588157; }
+    .role-card h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .role-card ul { margin: 0; }
+    .role-card li { font-size: 0.9rem; }
+
+    /* ── TUTORIAL PASOS ── */
+    .steps { counter-reset: step; }
+    .step {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 22px;
+      align-items: flex-start;
+    }
+    .step-num {
+      counter-increment: step;
+      background: var(--primary);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.95rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-body h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+    .step-body p  { font-size: 0.92rem; color: var(--muted); margin: 0; }
+
+    /* ── ALERTAS ── */
+    .alert {
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      font-size: 0.93rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .alert-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+    .alert-warning { background: #fff8e6; border-left: 4px solid #d4a373; }
+    .alert-danger  { background: #fdf0f1; border-left: 4px solid var(--danger); }
+    .alert-info    { background: #eef6ff; border-left: 4px solid #4a90d9; }
+    .alert-success { background: #edf7ed; border-left: 4px solid var(--success); }
+    .alert-body h4 { font-weight: 700; margin-bottom: 4px; font-size: 0.95rem; }
+    .alert-body p  { margin: 0; color: var(--muted); }
+
+    /* ── PLANES ── */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    .plan-card {
+      border-radius: 16px;
+      padding: 26px 24px;
+      border: 2px solid var(--border);
+      background: var(--card);
+      position: relative;
+    }
+    .plan-card.featured {
+      border-color: var(--primary);
+      background: #fffdf8;
+    }
+    .plan-card.featured::before {
+      content: 'Recomendado';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .plan-card h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .plan-price {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-bottom: 14px;
+    }
+    .plan-price span { font-size: 0.9rem; font-weight: 400; color: var(--muted); }
+    .plan-card ul { padding-left: 18px; }
+    .plan-card li { font-size: 0.88rem; margin-bottom: 5px; }
+    .check { color: var(--success); font-weight: 700; }
+    .cross { color: var(--danger); }
+
+    /* ── TABLA RESTRICCIONES ── */
+    .restrict-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .restrict-table th {
+      background: #ccd5ae;
+      color: #3d405b;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+    .restrict-table td {
+      padding: 11px 16px;
+      border-top: 1px solid #eee;
+      font-size: 0.88rem;
+      vertical-align: top;
+    }
+    .restrict-table tr:nth-child(even) { background: #fcfcf7; }
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .pill-warn   { background: #fff3cd; color: #856404; }
+    .pill-danger { background: #f8d7da; color: var(--danger); }
+    .pill-info   { background: #d1ecf1; color: #0c5460; }
+
+    /* ── FLUJO OPERATIVO ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 20px 0;
+    }
+    .flow-item {
+      background: var(--card);
+      border: 2px solid var(--primary);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--neutral);
+      text-align: center;
+    }
+    .flow-arrow {
+      font-size: 1.3rem;
+      color: var(--primary);
+      padding: 0 6px;
+    }
+
+    /* ── FOOTER ── */
+    .doc-footer {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background: white; }
+      .cover { page-break-after: always; }
+      .section { page-break-inside: avoid; }
+      .plans-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .cover h1 { font-size: 1.8rem; }
+      .roles-grid, .plans-grid { grid-template-columns: 1fr; }
+      .modules-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ PORTADA -->
+<div class="cover">
+  <img src="public/img/logoDulceG.jpeg" alt="Logo Dulce Guerrero'z" class="cover-logo"
+       onerror="this.style.display='none'">
+  <h1>Dulce Guerrero'z</h1>
+  <p class="subtitle">Sistema de Gestión de Inventario, Ventas y Finanzas</p>
+  <div class="cover-meta">
+    <span><strong>Versión:</strong> 1.0 — Entrega inicial</span>
+    <span><strong>Fecha:</strong> Mayo 2026</span>
+    <span><strong>Plataforma:</strong> Web — Acceso desde cualquier dispositivo</span>
+    
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ CONTENIDO -->
+<div class="doc">
+
+  <!-- ── 1. QUÉ ES EL SISTEMA ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📋</span> ¿Qué es este sistema?</div>
+    <p>
+      El <strong>Sistema de Gestión Dulce Guerrero'z</strong> es una aplicación web desarrollada a
+      la medida para administrar de forma digital el inventario de insumos, las recetas de productos,
+      el registro de ventas y el control financiero del negocio.
+    </p>
+    <p>
+      Funciona desde cualquier navegador web — computador, tableta o celular — sin necesidad de
+      instalar ningún programa. Basta con tener internet y abrir el enlace proporcionado.
+    </p>
+
+    <div class="alert alert-success">
+      <span class="alert-icon">✅</span>
+      <div class="alert-body">
+        <h4>Acceso inmediato desde el celular</h4>
+        <p>El sistema está diseñado pensando en el uso móvil: menú adaptable, botones grandes,
+           tablas con información prioritaria y navegación sencilla.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. MÓDULOS DEL SISTEMA ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🧩</span> Módulos del sistema</div>
+
+    <div class="modules-grid">
+
+      <div class="module-card">
+        <span class="mod-icon">📊</span>
+        <h4>Dashboard</h4>
+        <p>Resumen del día al entrar: ventas de hoy, total de la semana e insumos con stock bajo. Acceso rápido a todas las secciones.</p>
+        <span class="mod-badge badge-all">Todos los usuarios</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">💰</span>
+        <h4>Registro de ventas</h4>
+        <p>Selección de productos con búsqueda, múltiples productos por venta, cálculo automático del total y descuento inmediato de stock de insumos.</p>
+        <span class="mod-badge badge-all">Todos los usuarios</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">🧾</span>
+        <h4>Historial de ventas</h4>
+        <p>Listado de ventas con filtros rápidos (Hoy, Esta semana) y vista de detalle por transacción con todos los productos incluidos.</p>
+        <span class="mod-badge badge-all">Todos los usuarios</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">🧂</span>
+        <h4>Inventario de insumos</h4>
+        <p>Stock de cada insumo con alertas visuales de stock mínimo, búsqueda por nombre y unidad, y creación, edición o eliminación.</p>
+        <span class="mod-badge badge-admin">Solo administrador (crear/editar/eliminar)</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">📈</span>
+        <h4>Estadísticas de insumos</h4>
+        <p>Gráficas de consumo por período con filtro de fechas: ranking de los más y menos usados, consumo diario y tabla con porcentajes.</p>
+        <span class="mod-badge badge-admin">Solo administrador</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">📋</span>
+        <h4>Conteo de inventario</h4>
+        <p>Formulario con buscador en tiempo real para ingresar la cantidad física de cada insumo. El sistema calcula diferencias y actualiza el stock automáticamente.</p>
+        <span class="mod-badge badge-all">Todos los usuarios</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">📦</span>
+        <h4>Entradas de inventario</h4>
+        <p>Registro de compras o ingresos de insumos con actualización automática del stock y fecha de entrada.</p>
+        <span class="mod-badge badge-admin">Solo administrador</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">📝</span>
+        <h4>Recetas</h4>
+        <p>Gestión de recetas por producto: selección de insumos y cantidades necesarias por unidad producida. Base para el descuento automático de stock al vender.</p>
+        <span class="mod-badge badge-admin">Solo administrador</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">🍬</span>
+        <h4>Productos</h4>
+        <p>Catálogo de productos generados desde las recetas, con nombre, precio de venta y estado activo/inactivo.</p>
+        <span class="mod-badge badge-admin">Solo administrador</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">💹</span>
+        <h4>Finanzas</h4>
+        <p>Seguimiento de ingresos (ventas + manuales) y gastos por categoría. Gráfica de evolución diaria, gráfica de gastos por categoría y composición de ingresos.</p>
+        <span class="mod-badge badge-admin">Solo administrador</span>
+      </div>
+
+      <div class="module-card">
+        <span class="mod-icon">👥</span>
+        <h4>Gestión de usuarios</h4>
+        <p>Creación, edición y eliminación de cuentas. Asignación de rol (administrador o empleado) con accesos diferenciados al sistema.</p>
+        <span class="mod-badge badge-admin">Solo administrador</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 3. ROLES Y ACCESOS ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔐</span> Roles y accesos</div>
+    <p>El sistema tiene dos tipos de usuario con permisos distintos:</p>
+
+    <div class="roles-grid">
+      <div class="role-card role-admin">
+        <h4>👑 Administrador</h4>
+        <ul>
+          <li>Dashboard con resumen completo</li>
+          <li>Registrar y ver ventas</li>
+          <li>Crear, editar y eliminar insumos</li>
+          <li>Ver estadísticas de insumos</li>
+          <li>Hacer conteos de inventario</li>
+          <li>Registrar entradas de stock</li>
+          <li>Crear y editar recetas y productos</li>
+          <li>Ver y registrar finanzas y gastos</li>
+          <li>Gestionar usuarios</li>
+        </ul>
+      </div>
+      <div class="role-card role-emp">
+        <h4>👤 Empleado</h4>
+        <ul>
+          <li>Dashboard con resumen del día</li>
+          <li>Registrar y ver ventas</li>
+          <li>Ver inventario de insumos</li>
+          <li>Hacer conteos de inventario</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. FLUJO OPERATIVO ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔄</span> ¿Cómo funciona el sistema?</div>
+
+    <h3>Flujo de una venta</h3>
+    <div class="flow">
+      <div class="flow-item">Seleccionar productos</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Ingresar cantidades</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Confirmar venta</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Stock descontado automáticamente</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Venta registrada en historial</div>
+    </div>
+
+    <div class="alert alert-info">
+      <span class="alert-icon">ℹ️</span>
+      <div class="alert-body">
+        <h4>Descuento automático de insumos</h4>
+        <p>Cuando se registra una venta, el sistema consulta la receta de cada producto y descuenta exactamente la cantidad de cada insumo utilizado. No es necesario hacerlo manualmente.</p>
+      </div>
+    </div>
+
+    <h3>Flujo de gestión de inventario</h3>
+    <div class="flow">
+      <div class="flow-item">Recibir mercancía</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Registrar entrada de insumo</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Stock actualizado</div>
+    </div>
+    <div class="flow" style="margin-top:10px;">
+      <div class="flow-item">Conteo físico</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Ingresar cantidades reales</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-item">Sistema corrige diferencias</div>
+    </div>
+  </div>
+
+  <!-- ── 5. TUTORIAL DE USO ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📖</span> Tutorial de uso</div>
+
+    <h3>Para el administrador</h3>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Iniciar sesión</h4>
+          <p>Ingresa al enlace del sistema, escribe tu correo electrónico y contraseña. El sistema te llevará directamente al dashboard con el resumen del día.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Configurar insumos</h4>
+          <p>Ve a <strong>🧂 Insumos → + Nuevo insumo</strong>. Ingresa el nombre, unidad de medida, stock inicial y stock mínimo. El stock mínimo genera alertas automáticas cuando el inventario está bajo.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Crear recetas y productos</h4>
+          <p>Ve a <strong>📝 Recetas → Crear receta</strong>. Escribe el nombre del producto, su precio de venta, y selecciona los insumos con la cantidad que consume cada unidad producida. Esto es lo que el sistema descuenta automáticamente al vender.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Registrar entradas de stock</h4>
+          <p>Cada vez que llegue mercancía, ve a <strong>📦 Entradas → Registrar entrada</strong>. Selecciona el insumo, la cantidad recibida y la fecha. El stock se actualiza solo.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Registrar gastos e ingresos</h4>
+          <p>En <strong>📊 Finanzas</strong> puedes registrar gastos (servicios, personal, materias primas, mantenimiento) e ingresos manuales. Las gráficas se actualizan automáticamente mostrando el balance del período.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4>Crear usuarios para empleados</h4>
+          <p>Ve a <strong>👥 Usuarios → + Nuevo usuario</strong>. Ingresa nombre, correo y contraseña del empleado. Asigna el rol "Empleado" para limitar su acceso solo a ventas e inventario.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <h3>Para el empleado</h3>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Iniciar sesión y revisar el dashboard</h4>
+          <p>Al entrar verás cuántas ventas se han hecho hoy y si hay insumos con stock bajo. Es la primera pantalla que debes revisar al comenzar el turno.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Registrar una venta</h4>
+          <p>Toca <strong>💰 Nueva venta</strong>. Busca y selecciona el producto vendido, ingresa la cantidad y toca <strong>Confirmar venta</strong>. Si el cliente compró varios productos distintos, usa el botón <em>"+ Agregar otro producto"</em> antes de confirmar.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Hacer conteo de inventario</h4>
+          <p>Ve a <strong>📋 Hacer conteo</strong>. Usa el buscador para encontrar rápidamente cada insumo, escribe la cantidad real que encontraste en bodega y al terminar presiona <strong>Guardar conteo</strong>. Solo los campos que llenes serán actualizados.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Consultar el inventario</h4>
+          <p>En <strong>🧂 Ver inventario</strong> puedes ver el stock actual de todos los insumos. Los que tienen fondo rojo están por debajo del mínimo y necesitan reposición.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  
+  <!-- ── 8. OPCIONES DE CONTINUIDAD ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">💳</span> Opciones para continuar el servicio</div>
+    <p>Existen dos alternativas para mantener el sistema activo después del período de prueba:</p>
+
+    <div class="plans-grid">
+
+      <div class="plan-card featured">
+        <h4>🛠️ Plan de mantenimiento con el desarrollador</h4>
+        <div class="plan-price">Desde $65.000 COP <span>/ mes</span></div>
+        <ul>
+          <li><span class="check">✓</span> El desarrollador gestiona todo el hosting</li>
+          <li><span class="check">✓</span> Soporte técnico ante errores o caídas</li>
+          <li><span class="check">✓</span> Actualizaciones menores del sistema</li>
+          <li><span class="check">✓</span> Monitoreo y respaldo de la base de datos</li>
+          <li><span class="check">✓</span> Sin necesidad de crear cuentas externas</li>
+          <li><span class="check">✓</span> Un punto de contacto para todo</li>
+        </ul>
+        <p style="font-size:0.82rem; color:var(--muted); margin-top:14px; font-style:italic;">
+          * El valor puede ajustarse según el nivel de servicio requerido.
+        </p>
+      </div>
+
+      <div class="plan-card">
+        <h4>☁️ Cuenta propia en Railway y GitHub</h4>
+        <div class="plan-price">~$24.000 COP <span>/ mes</span></div>
+        <ul>
+          <li><span class="check">✓</span> Control total sobre la cuenta</li>
+          <li><span class="check">✓</span> Pago directo a Railway (USD ~$5/mes)</li>
+          <li><span class="cross">✗</span> Requiere tarjeta de crédito internacional</li>
+          <li><span class="cross">✗</span> Configuración técnica inicial</li>
+          <li><span class="cross">✗</span> Sin soporte técnico incluido</li>
+          <li><span class="cross">✗</span> Actualizaciones y mantenimiento aparte</li>
+        </ul>
+        <p style="font-size:0.82rem; color:var(--muted); margin-top:14px; font-style:italic;">
+          * Precio referencial sujeto a variación del dólar.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 9. DATOS DE CONTACTO ── -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📞</span> Contacto del desarrollador</div>
+    <p>Para contratación del plan de mantenimiento, soporte técnico, solicitud de nuevas funciones o cualquier consulta relacionada con el sistema:</p>
+
+    <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px 28px; margin-top:10px;">
+      <p style="margin-bottom:8px;"><strong>Desarrollador:</strong> Victor Manuel Velasquez Benavides</p>
+      <p style="margin-bottom:8px;"><strong>Correo:</strong> victormanux0925@gmail.com</p>
+      <p style="margin-bottom:0;"><strong>Sistema:</strong> Dulce Guerrero'z v1.0 — Desarrollado a la medida</p>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="doc-footer">
+    <p>Documento de entrega — Sistema de Gestión Dulce Guerrero'z · Versión 1.0 · Mayo 2026</p>
+    <p style="margin-top:4px;">Todos los derechos reservados</p>
+  </div>
+
+</div>
+</body>
+</html>

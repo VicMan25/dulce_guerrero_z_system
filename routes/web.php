@@ -23,6 +23,8 @@ Route::middleware(['auth', 'no-cache'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/ping-session', fn() => response()->json(['ok' => true]))->name('ping.session');
+
     // Solo administrador
     Route::middleware('role:administrador')->group(function () {
         Route::resource('productos', ProductoController::class)->only(['index']);

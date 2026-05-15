@@ -633,6 +633,113 @@
         }
     </script>
 
+    {{-- ── INACTIVIDAD ──────────────────────────────────────────────────── --}}
+    @auth
+    {{-- Modal de advertencia --}}
+    <div id="modal-inactividad"
+         style="display:none; position:fixed; inset:0; z-index:9999;
+                background:rgba(0,0,0,0.55); align-items:center; justify-content:center;">
+        <div style="background:white; border-radius:18px; padding:32px 28px;
+                    max-width:380px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+                    text-align:center; animation:fadeIn 0.3s ease;">
+            <div style="font-size:2.8rem; margin-bottom:10px;">⏰</div>
+            <h3 style="color:#6b705c; margin:0 0 8px; font-size:1.15rem;">Sesión a punto de cerrar</h3>
+            <p style="color:#7a7a7a; font-size:0.93rem; margin-bottom:6px; line-height:1.5;">
+                No hemos detectado actividad.<br>
+                Tu sesión se cerrará en:
+            </p>
+            <div id="countdown-display"
+                 style="font-size:2rem; font-weight:800; color:#b23a48;
+                        margin:10px 0 22px; letter-spacing:2px;">5:00</div>
+            <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <button onclick="extenderSesion()"
+                        style="background:#588157; color:white; border:none; border-radius:10px;
+                               padding:12px 22px; font-size:0.95rem; font-weight:600; cursor:pointer;
+                               min-height:44px; transition:opacity 0.2s;">
+                    ✔ Continuar sesión
+                </button>
+                <button onclick="cerrarSesionAhora()"
+                        style="background:#b23a48; color:white; border:none; border-radius:10px;
+                               padding:12px 22px; font-size:0.95rem; font-weight:600; cursor:pointer;
+                               min-height:44px; transition:opacity 0.2s;">
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Formulario oculto para logout por inactividad --}}
+    <form id="form-logout-inactividad" method="POST" action="{{ route('logout') }}" style="display:none;">
+        @csrf
+        <input type="hidden" name="inactividad" value="1">
+    </form>
+
+    <script>
+    (function () {
+        const INACTIVO_MS  = 25 * 60 * 1000; // 25 min sin actividad → mostrar modal
+        const AVISO_SEG    = 5 * 60;          // 5 min de cuenta regresiva en modal
+
+        const modal   = document.getElementById('modal-inactividad');
+        const display = document.getElementById('countdown-display');
+        let timerInac = null;
+        let timerCuenta = null;
+        let segundos  = AVISO_SEG;
+
+        function fmt(s) {
+            const m = Math.floor(s / 60);
+            const ss = String(s % 60).padStart(2, '0');
+            return `${m}:${ss}`;
+        }
+
+        function mostrarModal() {
+            segundos = AVISO_SEG;
+            display.textContent = fmt(segundos);
+            modal.style.display = 'flex';
+
+            timerCuenta = setInterval(function () {
+                segundos--;
+                display.textContent = fmt(segundos);
+                if (segundos <= 0) {
+                    clearInterval(timerCuenta);
+                    cerrarPorInactividad();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            if (modal.style.display === 'flex') return; // modal visible: no resetear
+            clearTimeout(timerInac);
+            timerInac = setTimeout(mostrarModal, INACTIVO_MS);
+        }
+
+        window.extenderSesion = function () {
+            clearInterval(timerCuenta);
+            modal.style.display = 'none';
+            fetch('{{ route("ping.session") }}', {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).catch(function () {});
+            resetTimer();
+        };
+
+        window.cerrarSesionAhora = function () {
+            cerrarPorInactividad();
+        };
+
+        function cerrarPorInactividad() {
+            clearInterval(timerCuenta);
+            modal.style.display = 'none';
+            document.getElementById('form-logout-inactividad').submit();
+        }
+
+        ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll', 'click'].forEach(function (ev) {
+            document.addEventListener(ev, resetTimer, { passive: true });
+        });
+
+        resetTimer();
+    })();
+    </script>
+    @endauth
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @yield('scripts')
