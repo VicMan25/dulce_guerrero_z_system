@@ -8,7 +8,8 @@
       "Bash(php -l \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\\\\routes\\\\web.php\")",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Force | Select-Object Name, @{Name=\"Type\";Expression={if\\($_.PSIsContainer\\){\"DIR\"}else{\"FILE\"}}} | Format-Table -AutoSize)",
       "PowerShell(Head *)",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Force | Where-Object {$_.PSIsContainer} | Select-Object Name)"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\" -Force | Where-Object {$_.PSIsContainer} | Select-Object Name)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\"C:\\\\Users\\\\Victor Manuel\\\\Desktop\\\\DulceG\\\\public\\\\img\\\\logoDulceG.jpeg\"\\); Write-Host \"Dimensiones reales: $\\($img.Width\\) x $\\($img.Height\\) px\"; $img.Dispose\\(\\))"
     ]
   }
 }
