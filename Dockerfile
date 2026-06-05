@@ -19,7 +19,7 @@ COPY . .
 
 # Instalar dependencias PHP y JS
 RUN composer install --no-dev --optimize-autoloader
-RUN npm ci && npm run build
+RUN npm install && npm run build
 
 # Permisos
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
