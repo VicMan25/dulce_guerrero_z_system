@@ -15,6 +15,10 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', fn() => redirect()->route('login'));
 
+Route::get('/manifest.json', fn() =>
+    response()->view('manifest')->header('Content-Type', 'application/manifest+json')
+)->name('manifest');
+
 Route::get('/login',  [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

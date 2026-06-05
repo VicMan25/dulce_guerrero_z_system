@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Sistema de Inventario y Ventas' }}</title>
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="{{ route('manifest') }}">
     <meta name="theme-color" content="#d4a373">
     <link rel="apple-touch-icon" href="{{ asset('img/icon-192.png') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
