@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Sistema de Inventario y Ventas' }}</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#d4a373">
+    <link rel="apple-touch-icon" href="{{ asset('img/logoDulceG.jpeg') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DulceG">
     <style>
         :root {
             --color-1: #ccd5ae;

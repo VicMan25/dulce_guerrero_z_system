@@ -117,6 +117,7 @@
                     <th>Categoría</th>
                     <th>Monto</th>
                     <th>Fecha</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -127,10 +128,27 @@
                         <td><span class="badge badge-success">{{ $ingreso->categoria }}</span></td>
                         <td>$ {{ number_format($ingreso->monto, 0, ',', '.') }}</td>
                         <td>{{ $ingreso->fecha }}</td>
+                        <td style="white-space:nowrap;">
+                            <a href="{{ route('ingresos.edit', $ingreso->id_ingreso) }}"
+                               class="btn btn-secondary"
+                               style="font-size:0.82rem; padding:7px 11px; min-height:36px;">
+                                Editar
+                            </a>
+                            <form action="{{ route('ingresos.destroy', $ingreso->id_ingreso) }}"
+                                  method="POST" class="inline-form"
+                                  onsubmit="return confirm('¿Eliminar este ingreso?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger"
+                                        style="font-size:0.82rem; padding:7px 11px; min-height:36px;">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="muted">No hay ingresos manuales en este período.</td>
+                        <td colspan="6" class="muted">No hay ingresos manuales en este período.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -152,6 +170,7 @@
                     <th>Categoría</th>
                     <th>Monto</th>
                     <th>Fecha</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -162,10 +181,27 @@
                         <td><span class="badge badge-neutral">{{ $gasto->categoria }}</span></td>
                         <td>$ {{ number_format($gasto->monto, 0, ',', '.') }}</td>
                         <td>{{ $gasto->fecha }}</td>
+                        <td style="white-space:nowrap;">
+                            <a href="{{ route('gastos.edit', $gasto->id_gasto) }}"
+                               class="btn btn-secondary"
+                               style="font-size:0.82rem; padding:7px 11px; min-height:36px;">
+                                Editar
+                            </a>
+                            <form action="{{ route('gastos.destroy', $gasto->id_gasto) }}"
+                                  method="POST" class="inline-form"
+                                  onsubmit="return confirm('¿Eliminar este gasto?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger"
+                                        style="font-size:0.82rem; padding:7px 11px; min-height:36px;">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="muted">No hay gastos registrados en este período.</td>
+                        <td colspan="6" class="muted">No hay gastos registrados en este período.</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -32,8 +32,8 @@ Route::middleware(['auth', 'no-cache'])->group(function () {
         Route::get('insumos/estadisticas', [InsumoController::class, 'estadisticas'])->name('insumos.estadisticas');
         Route::resource('insumos',   InsumoController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
         Route::resource('entradas',  EntradaInventarioController::class)->only(['index', 'create', 'store']);
-        Route::resource('gastos',    GastoController::class)->only(['index', 'create', 'store']);
-        Route::resource('ingresos',  IngresoManualController::class)->only(['create', 'store']);
+        Route::resource('gastos',    GastoController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::resource('ingresos',  IngresoManualController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
         Route::resource('usuarios',  UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     });
 

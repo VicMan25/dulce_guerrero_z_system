@@ -133,4 +133,49 @@ class GastoController extends Controller
         return redirect()->route('gastos.index')
             ->with('success', 'Gasto registrado correctamente.');
     }
+
+    public function edit($id)
+    {
+        $gasto = Gasto::findOrFail($id);
+        return view('gastos.edit', compact('gasto'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $gasto = Gasto::findOrFail($id);
+
+        $monto = str_replace('.', '', $request->monto ?? '');
+        $request->merge(['monto' => $monto]);
+
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+            'monto'       => 'required|numeric|min:0.01',
+            'fecha'       => 'required|date',
+            'categoria'   => 'required|string|max:100',
+        ], [
+            'descripcion.required' => 'Ingrese una descripción.',
+            'monto.required'       => 'Ingrese el monto.',
+            'monto.min'            => 'El monto debe ser mayor a cero.',
+            'fecha.required'       => 'Ingrese la fecha.',
+            'categoria.required'   => 'Seleccione una categoría.',
+        ]);
+
+        $gasto->update([
+            'descripcion' => $request->descripcion,
+            'monto'       => $request->monto,
+            'fecha'       => $request->fecha,
+            'categoria'   => $request->categoria,
+        ]);
+
+        return redirect()->route('gastos.index')
+            ->with('success', 'Gasto actualizado correctamente.');
+    }
+
+    public function destroy($id)
+    {
+        Gasto::findOrFail($id)->delete();
+
+        return redirect()->route('gastos.index')
+            ->with('success', 'Gasto eliminado correctamente.');
+    }
 }

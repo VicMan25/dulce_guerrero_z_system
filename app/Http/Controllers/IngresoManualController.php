@@ -38,4 +38,47 @@ class IngresoManualController extends Controller
         return redirect()->route('gastos.index')
             ->with('success', 'Ingreso registrado correctamente.');
     }
+
+    public function edit($id)
+    {
+        $ingreso = IngresoManual::findOrFail($id);
+        return view('ingresos.edit', compact('ingreso'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $ingreso = IngresoManual::findOrFail($id);
+
+        $monto = str_replace('.', '', $request->monto ?? '');
+        $request->merge(['monto' => $monto]);
+
+        $request->validate([
+            'monto'     => 'required|numeric|min:0.01',
+            'fecha'     => 'required|date',
+            'categoria' => 'required|string|max:100',
+        ], [
+            'monto.required'     => 'Ingrese el monto.',
+            'monto.min'          => 'El monto debe ser mayor a cero.',
+            'fecha.required'     => 'Ingrese la fecha.',
+            'categoria.required' => 'Seleccione una categoría.',
+        ]);
+
+        $ingreso->update([
+            'monto'       => $request->monto,
+            'descripcion' => $request->descripcion,
+            'fecha'       => $request->fecha,
+            'categoria'   => $request->categoria,
+        ]);
+
+        return redirect()->route('gastos.index')
+            ->with('success', 'Ingreso actualizado correctamente.');
+    }
+
+    public function destroy($id)
+    {
+        IngresoManual::findOrFail($id)->delete();
+
+        return redirect()->route('gastos.index')
+            ->with('success', 'Ingreso eliminado correctamente.');
+    }
 }
