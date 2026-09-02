@@ -18,6 +18,7 @@ class EntradaInventario extends Model
 
     public function insumo()
     {
-        return $this->belongsTo(Insumo::class, 'id_insumo', 'id_insumo');
+        // withTrashed: la entrada sigue mostrando el insumo aunque se haya eliminado.
+        return $this->belongsTo(Insumo::class, 'id_insumo', 'id_insumo')->withTrashed();
     }
 }

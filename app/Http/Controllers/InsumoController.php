@@ -108,22 +108,22 @@ class InsumoController extends Controller
     {
         $insumo = Insumo::findOrFail($id);
 
+        // Solo se bloquea si el insumo sigue en uso dentro de una receta.
+        // Los movimientos históricos (entradas de inventario y conteos) NO
+        // impiden la eliminación: se conservan como registro y el insumo se
+        // oculta mediante borrado lógico (soft delete).
         $enRecetas = DetalleReceta::where('id_insumo', $id)->count();
         if ($enRecetas > 0) {
             $plural = $enRecetas === 1 ? 'receta' : 'recetas';
             return redirect()->route('insumos.index')
-                ->with('error', "El insumo \"{$insumo->nombre}\" no puede eliminarse porque está asignado a {$enRecetas} {$plural}.");
+                ->with('error', "El insumo \"{$insumo->nombre}\" no puede eliminarse porque todavía está asignado a {$enRecetas} {$plural}. Quítalo de esas recetas para poder eliminarlo.");
         }
 
-        try {
-            $nombre = $insumo->nombre;
-            $insumo->delete();
-            return redirect()->route('insumos.index')
-                ->with('success', "Insumo \"{$nombre}\" eliminado correctamente.");
-        } catch (\Exception $e) {
-            return redirect()->route('insumos.index')
-                ->with('error', "No se pudo eliminar el insumo porque tiene registros relacionados.");
-        }
+        $nombre = $insumo->nombre;
+        $insumo->delete(); // Borrado lógico: marca deleted_at y conserva el historial.
+
+        return redirect()->route('insumos.index')
+            ->with('success', "Insumo \"{$nombre}\" eliminado. Los movimientos anteriores se conservan en el historial.");
     }
 
     public function estadisticas(Request $request)

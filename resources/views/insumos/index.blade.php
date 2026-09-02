@@ -108,7 +108,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger"
                                             style="padding:6px 12px; font-size:0.85rem;"
-                                            onclick="return confirm('¿Eliminar el insumo «{{ $insumo->nombre }}»? Esta acción no se puede deshacer.')">
+                                            onclick="return confirm('¿Eliminar el insumo «{{ $insumo->nombre }}»? Dejará de aparecer en el inventario, pero los movimientos y conteos anteriores se conservan.')">
                                         Eliminar
                                     </button>
                                 </form>
