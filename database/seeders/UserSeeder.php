@@ -10,6 +10,13 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        // En producción solo siembra si se pide explícitamente (ALLOW_USER_SEED=true).
+        // Así un re-seed accidental no recrea el admin por defecto.
+        if (app()->environment('production') && ! env('ALLOW_USER_SEED', false)) {
+            $this->command?->warn('UserSeeder omitido en producción (define ALLOW_USER_SEED=true para forzarlo).');
+            return;
+        }
+
         User::firstOrCreate(
             ['email' => 'admin@dulceg.com'],
             [

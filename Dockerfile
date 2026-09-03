@@ -26,4 +26,6 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 
 EXPOSE 80
 
-CMD php artisan migrate --force && php artisan db:seed --force && php artisan storage:link --force && apache2-foreground
+# El seed NO se ejecuta en cada arranque (evita recrear usuarios por defecto / backdoor).
+# Para sembrar la primera vez: entrar al contenedor y correr `php artisan db:seed --force` a mano.
+CMD php artisan migrate --force && php artisan storage:link --force && apache2-foreground
