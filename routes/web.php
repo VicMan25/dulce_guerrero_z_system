@@ -41,12 +41,12 @@ Route::middleware(['auth', 'no-cache'])->group(function () {
         Route::resource('ingresos',  IngresoManualController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
         Route::resource('usuarios',  UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 
-        // Aseo de baños — gestión (solo administrador)
-        Route::post('aseo/registro',            [AseoController::class, 'store'])->name('aseo.store');
-        Route::delete('aseo/registro/{id}',     [AseoController::class, 'destroy'])->name('aseo.destroy');
-        Route::post('aseo/orden/{id}/subir',    [AseoController::class, 'subir'])->name('aseo.subir');
-        Route::post('aseo/orden/{id}/bajar',    [AseoController::class, 'bajar'])->name('aseo.bajar');
-        Route::post('aseo/participante/{id}/toggle', [AseoController::class, 'toggle'])->name('aseo.toggle');
+        // Aseo del domingo — gestión (solo administrador)
+        Route::post('aseo/{actividad}/registro',              [AseoController::class, 'store'])->name('aseo.store');
+        Route::delete('aseo/{actividad}/registro/{id}',       [AseoController::class, 'destroy'])->name('aseo.destroy');
+        Route::post('aseo/{actividad}/orden/{id}/subir',      [AseoController::class, 'subir'])->name('aseo.subir');
+        Route::post('aseo/{actividad}/orden/{id}/bajar',      [AseoController::class, 'bajar'])->name('aseo.bajar');
+        Route::post('aseo/{actividad}/participante/{id}/toggle', [AseoController::class, 'toggle'])->name('aseo.toggle');
     });
 
     // Administrador y empleado
@@ -55,8 +55,8 @@ Route::middleware(['auth', 'no-cache'])->group(function () {
         Route::resource('insumos',  InsumoController::class)->only(['index']);
         Route::resource('conteos',  ConteoInventarioController::class)->only(['index', 'create', 'store', 'show']);
 
-        // Aseo de baños — consulta (administrador y empleado)
-        Route::get('aseo', [AseoController::class, 'index'])->name('aseo.index');
+        // Aseo del domingo — consulta (administrador y empleado)
+        Route::get('aseo/{actividad}', [AseoController::class, 'index'])->name('aseo.index');
     });
 
 });

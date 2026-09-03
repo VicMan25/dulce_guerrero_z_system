@@ -8,7 +8,7 @@ class TurnoAseo extends Model
 {
     protected $table = 'turnos_aseo';
 
-    protected $fillable = ['user_id', 'orden', 'activo'];
+    protected $fillable = ['actividad', 'user_id', 'orden', 'activo'];
 
     protected $casts = ['activo' => 'boolean'];
 

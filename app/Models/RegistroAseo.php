@@ -9,7 +9,7 @@ class RegistroAseo extends Model
     protected $table = 'registros_aseo';
 
     protected $fillable = [
-        'user_id', 'nombre_usuario', 'fecha', 'motivo', 'ciclo', 'registrado_por',
+        'actividad', 'user_id', 'nombre_usuario', 'fecha', 'motivo', 'nota', 'ciclo', 'registrado_por',
     ];
 
     protected $casts = ['fecha' => 'date'];
