@@ -76,6 +76,11 @@
         <p>Hacer conteo</p>
     </a>
 
+    <a href="{{ route('aseo.index') }}" class="quick-card">
+        <span class="quick-icon">🧹</span>
+        <p>Turno de aseo</p>
+    </a>
+
     @if(auth()->user()->esAdmin())
         <a href="{{ route('entradas.create') }}" class="quick-card">
             <span class="quick-icon">📦</span>

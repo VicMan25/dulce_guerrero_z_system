@@ -532,6 +532,10 @@
                            class="{{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
                             👥 Usuarios
                         </a>
+                        <a href="{{ route('aseo.index') }}"
+                           class="{{ request()->routeIs('aseo.*') ? 'active' : '' }}">
+                            🧹 Aseo
+                        </a>
                     @else
                         {{-- EMPLEADO --}}
                         <a href="{{ route('ventas.create') }}"
@@ -549,6 +553,10 @@
                         <a href="{{ route('conteos.index') }}"
                            class="{{ request()->routeIs('conteos.*') ? 'active' : '' }}">
                             📋 Conteos
+                        </a>
+                        <a href="{{ route('aseo.index') }}"
+                           class="{{ request()->routeIs('aseo.*') ? 'active' : '' }}">
+                            🧹 Aseo
                         </a>
                     @endif
 
